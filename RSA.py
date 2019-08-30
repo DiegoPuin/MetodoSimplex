@@ -28,3 +28,27 @@ tk.Button(marco, text='Desencriptar', command=desencriptar).grid(row=3, column=1
 tk.Button(marco, text='Cerrar', command=cerrar).grid(row=3, column=2, sticky=tk.W, pady=4)
 
 marco.mainloop()
+
+##########################################################################################################
+
+p = int(input("Digite un numero entero primo: ")) 
+q = int(input("Digite un numero entero primo: "))
+n = int(input("Digite un numero entero primo: "))
+
+phi = (p-1)*(q-1)
+z = p*q
+
+s = n+1
+while ((n*s) % phi == 1):
+    s += 1
+
+frase = "yo soy diego puin"
+fraseAscci = []
+
+for letra in frase:
+    fraseAscci.append(ord(letra))
+    
+potencias = []
+potencias.append((fraseAscci[0])**(2**0)%z)
+for i in len(1, bin(n-2)):
+    potencias.append((potencias[i-1]*potencias[i-1])%z)
