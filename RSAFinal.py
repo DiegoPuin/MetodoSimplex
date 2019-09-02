@@ -26,6 +26,7 @@ def generacionpyq(n):
     q = numero_primo_random(n)
     while p==q:
         q = numero_primo_random(n)
+    print("p es: " + str(p) + " y q es: " + str(q))
     return p,q
 
 def es_coprimo(n,m):
@@ -72,6 +73,7 @@ def generacion_clave():
         num = int(input("Digite numero mayor o igual a 2: "))
     p,q= generacionpyq(num)
     n = p*q
+    print("n es: " + str(n))
     clave_privada.append(n)
     clave_publica.append(n)
     phi = (p-1)*(q-1)
@@ -121,6 +123,7 @@ def descifrado(mensaje_num,clave):
 marco = tk.Tk()
 result = tk.StringVar()
 campo1 = tk.Entry(marco)
+l_respuesta = tk.Label(marco, textvariable = result)
 
 def cerrar():
     marco.destroy()
@@ -133,9 +136,12 @@ def verEncriptacion():
     result.set(text[:len(text)-1])
     
 def verDesencriptacion():
-    #Solo falta esta parte
-    result.set("Desencriptando...")
-  
+    cadenaAux = []
+    cadenaAux = campo1.get().split('-')
+    for k in range(len(cadenaAux)):
+        cadenaAux[k] = int(cadenaAux[k])
+    result.set(descifrado(cadenaAux, clavepriv))
+    
 #Construccion de la ventana
 def construirVentana():
     marco.title("RSA")
@@ -155,7 +161,6 @@ def construirVentana():
     l_resultado.grid(row=2, padx=10, pady=10)
     l_resultado.config(fg="blue", bg='#f2f2d4', font=("Verdana", 15))
     
-    l_respuesta = tk.Label(marco, textvariable = result)
     l_respuesta.grid(row=2, column=1, padx=10, pady=10)
     l_respuesta.config(fg="red", bg='#f2f2d4', font=("Verdana", 15))
     
@@ -181,6 +186,8 @@ def construirVentana():
 clavepriv=[]
 clavepubli=[]
 clavepubli,clavepriv = generacion_clave()
+print(descifrado(cifrado("Hola como estas",clavepubli),clavepriv))
+#print(cifrado("Hola como estas",clavepubli))
 construirVentana()
 
 ####################################VISTA###################################################### 
