@@ -151,7 +151,7 @@ def descifrado(mensaje_num):
 #        mensaje_num[i] = mypow(mensaje_num[i], clave[1]) % clave[0]
         mensaje_num[i] = cifrarNumero(mensaje_num[i])
     for j in range(len(mensaje_num)):
-        mensaje_letra = mensaje_letra + chr(mensaje_num[j])
+        mensaje_letra = mensaje_letra + str(mensaje_num[j])
     return mensaje_letra
 
 #clavepriv=[]
