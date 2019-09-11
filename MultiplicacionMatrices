@@ -9,21 +9,73 @@ result_a2 = tk.StringVar()
 result_b1 = tk.StringVar()
 result_b2 = tk.StringVar()
 
-def cerrar():
-    marco.destroy()
-             
-def valoresMatrices(m1, m2):
-    for i in range(2):
-        for j in range(2):
-            m1[i][j] = float(m1[i][j].get())
-            m2[i][j] = float(m2[i][j].get())
-    multiplicarMatriz(m1[0][0], m1[0][1], m1[1][0], m1[1][1], m2[0][0], m2[0][1], m2[1][0], m2[1][1])
-
-def multiplicarMatriz(a, b, c, d, e, f, g, h):
-    result_a1.set((a*e) + (b*g))
-    result_a2.set((a*f) + (b*h))
-    result_b1.set((c*e) + (d*g))
-    result_b2.set((c*f) + (d*h))
+class A():
+    def __init__(self, a, b, c, d):
+        self.__a = a
+        self.__b = b
+        self.__c = c
+        self.__d = d
+        self.__matriz1 = []
+        
+    def crearMatrizA(self):
+        for i in range(2):
+            self.__matriz1.append([])
+            for j in range(2):
+                self.__matriz1[i][j].append(None)
+        
+        self.__matriz1[0][0] = self.__a 
+        self.__matriz1[0][1] = self.__b
+        self.__matriz1[1][0] = self.__c
+        self.__matriz1[1][1] = self.__d
+        return self.__matriz1
+            
+class B(A):
+    def __init__(self, a, b, c, d, e, f, g, h):
+#        self.__a = a
+#        self.__b = b
+#        self.__c = c
+#        self.__d = d
+        A.__init__(self, a, b, c, d)
+        self.__e = e
+        self.__f = f
+        self.__g = g
+        self.__h = h
+        self.__matriz2 = []
+    
+    def crearMatrizB(self):
+        for i in range(2):
+            self.__matriz1.append([])
+            for j in range(2):
+                self.__matriz2[i][j].append(None)
+        
+        self.__matriz2[0][0] = self.__e 
+        self.__matriz2[0][1] = self.__f
+        self.__matriz2[1][0] = self.__g
+        self.__matriz2[1][1] = self.__h
+        return self.__matriz2
+    
+class C(B):
+    def __init__(self, a, b, c, d, e, f, g, h):
+        self.__a = a
+        self.__b = b
+        self.__c = c
+        self.__d = d
+        B.__init__(self, a, b, c, d, e, f, g, h)
+        self.__m1 = self.crearMatrizA
+        self.__m2 = self.crearMatrizB
+        
+    def valoresMatrices(self, m1, m2):
+        for i in range(2):
+            for j in range(2):
+                m1[i][j] = float(m1[i][j].get())
+                m2[i][j] = float(m2[i][j].get())
+        self.multiplicarMatriz(m1[0][0], m1[0][1], m1[1][0], m1[1][1], m2[0][0], m2[0][1], m2[1][0], m2[1][1])
+    
+    def multiplicarMatriz(self, a, b, c, d, e, f, g, h):
+        result_a1.set((a*e) + (b*g))
+        result_a2.set((a*f) + (b*h))
+        result_b1.set((c*e) + (d*g))
+        result_b2.set((c*f) + (d*h))
 
 def construirVentana():
     label_Bienvenido = tk.Label(marco, text='Bienvenido al modulo para multiplicar matrices, digite los valores de las matrices')
@@ -106,5 +158,8 @@ def construirVentana():
     b_cerrar.config(font=("Consolas",12), pady=5)                
     
     marco.mainloop()
+
+def cerrar():
+    marco.destroy()
 
 construirVentana()
