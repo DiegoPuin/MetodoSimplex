@@ -42,7 +42,7 @@ def crearInecuaciones(ventana, numInec):
             if j==3:
                 matriz[i][j].place(x=coorX4, y=coorY)
         coorY += 25
-        
+    
     btnGenerar = Button(ventana, text='Generar matriz', command = lambda:verificarSigno(matriz, opSignos, numInec) , font=("Times",15))
     btnGenerar.place(x=250, y=coorY+25)
     btnGraficar = Button(ventana, text='Graficar', command = lambda:metodoSimplexGrafico(matriz, numInec) , font=("Times",15))
@@ -63,10 +63,26 @@ def metodoSimplexGrafico(matriz, numInec):
                 matriz[i][j] = float(matriz[i][j].get())
         
     for i in range(numInec):
-        pa = (0 , matriz[i][3]/matriz[i][0]) # Volviendo y=0 y despejando x
-        pb = (matriz[i][3]/matriz[i][1], 0) # Volviendo x=0 y despejando y
-        rectas.append((pa, pb))    
-
+        pa = (matriz[i][3]/matriz[i][0], 0) # Volviendo y=0 y despejando x
+        pb = (0, matriz[i][3]/matriz[i][1]) # Volviendo x=0 y despejando y
+        rectas.append((pa, pb))   
+    
+    numRectas = len(rectas)
+    for i in range(numRectas):
+        for j in range(i+1, numRectas):
+            coorX, coorY = hallarIntersecciones((matriz[i][0], matriz[i][1], matriz[i][3]), (matriz[j][0], matriz[j][1], matriz[j][3]))
+            if coorX>=0 and coorY>=0:
+                if rectas.count((coorX, coorY)) == 0:
+                    rectas.append((coorX, coorY))
+    print(rectas)
+            
+def hallarIntersecciones(r1, r2):
+    y1 = (-r1[0]/r1[1], r1[2]/r1[1])
+    y2 = (-r2[0]/r2[1], r2[2]/r2[1])
+    coorX = (y2[1] - y1[1]) / (y1[0] - y2[0])
+    coorY = (y1[0]*coorX + y1[1])
+    return coorX, coorY
+    
 def vista():
     ventana = Tk()
     ventana.geometry("1000x550")
