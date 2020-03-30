@@ -113,12 +113,12 @@ def verificar(matriz, opSignos, numInec, maxmin, objX, objY, btnGraficar):
         opSigno = opSignos[i].get()
         matriz[i][2] = opSigno
             
-    if objX.get()=="" or objY.get()=="" or float(objX.get())<0 or float(objY.get())<0:
+    if objX.get()=="" or objY.get()=="":
         btnGraficar['state'] = DISABLED
         return False
     
     for i in range(numInec):
-        if matriz[i][0].get()=="" or matriz[i][1].get()=="" or matriz[i][3].get()=="" or float(matriz[i][0].get())<0 or float(matriz[i][1].get())<0:
+        if matriz[i][0].get()=="" or matriz[i][1].get()=="" or matriz[i][3].get()=="":
             btnGraficar['state'] = DISABLED
             return False
     btnGraficar['state'] = NORMAL
@@ -126,17 +126,19 @@ def verificar(matriz, opSignos, numInec, maxmin, objX, objY, btnGraficar):
 
 
 def cmp_tuplas(a, b):
-   if a[0]>b[0]:
-      return 1
-   elif a[0]<b[0]:
-      return -1
-   else:
-       if a[1]>b[1]:
-          return 1
-       elif a[1]<b[1]:
-          return -1
-       else:
-          return 0
+    if a[0]==0 and a[1]==0:
+        return 1
+    if a[0]>b[0]:     
+        return 1
+    elif a[0]<b[0]:
+        return -1
+    else:
+        if a[1]>b[1]:
+            return 1
+        elif a[1]<b[1]:
+            return -1
+        else:
+            return 0
 
 
 def metodoSimplexGrafico(ventana,matriz, numInec, maxmin, objX, objY):
@@ -203,7 +205,7 @@ def metodoSimplexGrafico(ventana,matriz, numInec, maxmin, objX, objY):
         for i in puntosaprobados:
             resX = float(objX.get())*i[0]
             resY = float(objY.get())*i[1]
-            if (resX + resY) < resultado:
+            if (resX + resY) < resultado and (resX + resY) != 0:
                 resultado = resX + resY
                 punto = i
     
@@ -215,7 +217,7 @@ def metodoSimplexGrafico(ventana,matriz, numInec, maxmin, objX, objY):
     canvas.pack()
     canvas.create_line(10, 500-10, 490, 500-10)
     canvas.create_line(10, 500-10, 10, 10)
-    aumento = 3
+    aumento = definirAumento(puntosaprobados)
 
     for i in range(numInec):
         canvas.create_line(10+rectas[i][0][0]*aumento,490-rectas[i][0][1]*aumento,10+rectas[i][1][0]*aumento,490-rectas[i][1][1]*aumento, fill = colorAleatorio() , width = 3)
@@ -252,7 +254,7 @@ def hallarIntersecciones(r1, r2):
         if r1[1] == 0:
             y2 = (-r2[0] / r2[1], r2[2] / r2[1])
             coorX = r1[2] / r1[0]
-            coorY = (y2[0]*coorX) + y1[1]
+            coorY = (y2[0]*coorX) + y2[1]
         if r2[1] == 0:
             y1 = (-r1[0] / r1[1], r1[2] / r1[1])
             coorX = r2[2] / r2[0]
@@ -265,6 +267,29 @@ def colorAleatorio():
     color = ["#" + ''.join([random.choice('0123456789ABCDEF') for j in range(6)])
              for i in range(number_of_colors)]
     return color[0]
+
+def definirAumento(puntosaprobados):
+    media = 0
+    n = 0
+    for i in puntosaprobados:
+        if i[0] != 0:
+            media += i[0]
+            n += 1
+        if i[1] != 0:
+            media += i[1]
+            n += 1
+    media = media/n
+    print('Media: ' + str(media))
+    if media < 1:
+        return 200
+    elif media < 10:
+        return 50
+    elif media < 20:
+        return 20
+    elif media>100:
+        return 1
+    else:
+        return 5
 
 def vista():
     ventana = Tk()
